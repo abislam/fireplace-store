@@ -1,4 +1,4 @@
-import { ADD_PRODUCT_CART, GET_NUMBERS_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from '../actions/types';
+import { ADD_PRODUCT_CART, GET_NUMBERS_CART, INCREASE_QUANTITY, DECREASE_QUANTITY, REMOVE_FROM_CART } from '../actions/types';
 
 const initialState = {
 	cartNumbers: 0,
@@ -98,6 +98,7 @@ export default (state = initialState, action) => {
 			productSelected.quantity += 1;
 			return {
 				...state,
+				cartNumbers: state.cartNumbers + 1,
 				cartTotalCost: state.cartTotalCost + state.cartProducts[action.payload].price,
 				cartProducts: {
 					...state.cartProducts,
@@ -107,23 +108,53 @@ export default (state = initialState, action) => {
 		case DECREASE_QUANTITY:
 			productSelected = { ...state.cartProducts[action.payload]}
 			let newCartCost = 0;
+			let newCartNumbers = 0;
 			if(productSelected.quantity === 0){
 				productSelected.quantity = 0
 				newCartCost = state.cartTotalCost
+				newCartNumbers = state.cartNumbers
 			}else{
 				productSelected.quantity -= 1;
 				newCartCost = state.cartTotalCost - state.cartProducts[action.payload].price
+				newCartNumbers = state.cartNumbers - 1
 			}
 			
 			return {
 				...state,
+				cartNumbers: newCartNumbers,
 				cartTotalCost: newCartCost,
 				cartProducts: {
 					...state.cartProducts,
 					[action.payload]: productSelected
 				}
 			}
+		case REMOVE_FROM_CART:
+			productSelected = { ...state.cartProducts[action.payload]}
+			let quantityTracker = productSelected.quantity;
+			productSelected.quantity = 0
+			productSelected.inCart = false
+			return{
+				...state,
+				cartNumbers: state.cartNumbers - quantityTracker,
+				cartTotalCost: state.cartTotalCost - (quantityTracker * productSelected.price),
+				cartProducts: {
+					...state.cartProducts,
+					[action.payload]: productSelected
+				}				
+			}
 		default:
 			return state;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

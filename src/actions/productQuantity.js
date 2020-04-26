@@ -1,4 +1,4 @@
-import { INCREASE_QUANTITY, DECREASE_QUANTITY } from './types';
+import { INCREASE_QUANTITY, DECREASE_QUANTITY, REMOVE_FROM_CART } from './types';
 
 export const productQuantity = (action, name) => {
 	return (dispatch) => {
@@ -11,4 +11,17 @@ export const productQuantity = (action, name) => {
 			payload: name
 		})
 	}
+}
+
+export const removeFromCart = (name) => {
+	return (dispatch) => {
+		console.log("Inside removeFromCart function")	
+		console.log("the product name is", name)
+
+		dispatch({
+			type: REMOVE_FROM_CART,
+			payload: name
+		})
+	}
+
 }

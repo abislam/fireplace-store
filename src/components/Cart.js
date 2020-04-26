@@ -1,7 +1,7 @@
 
 import React, {Fragment} from 'react'
 import { connect } from 'react-redux';
-import { productQuantity } from '../actions/productQuantity'
+import { productQuantity, removeFromCart } from '../actions/productQuantity'
 import shoe1 from '../images/image1.jpg'
 import shoe2 from '../images/image2.jpg'
 import shoe3 from '../images/image3.jpg'
@@ -12,7 +12,7 @@ import shoe7 from '../images/image7.jpg'
 import shoe8 from '../images/image8.jpg'
 import shoe9 from '../images/image9.jpg'
 
-function Cart({cartProps, productQuantity}){
+function Cart({cartProps, productQuantity, removeFromCart}){
 	console.log(cartProps)
 
 	let productsInCart = [];
@@ -53,7 +53,7 @@ function Cart({cartProps, productQuantity}){
 		console.log(product);
 		return(
 			<Fragment key={idx}>
-				<div className="product"><ion-icon name="close-circle"></ion-icon><img src={productImages(product)} />
+				<div className="product"><ion-icon onClick={() => removeFromCart(product.tagName)} name="close-circle"></ion-icon><img src={productImages(product)} />
 					<span className="sm-hide">{product.name}</span>
 				</div>
 				<div className="price sm-hide">${product.price}</div>
@@ -90,4 +90,4 @@ const mapStateToProps = state => ({
 	cartProps: state.cartState
 })
 
-export default connect(mapStateToProps, { productQuantity })(Cart);
+export default connect(mapStateToProps, { productQuantity, removeFromCart })(Cart);
